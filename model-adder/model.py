@@ -16,7 +16,7 @@ def pwd():
 
 def cd():
     path = sys.argv[0]
-    dir = os.path.dirname(path + "/..")
+    dir = os.path.dirname(path)
     return dir.replace("\\", "/") + "/.."
 
 
@@ -25,8 +25,9 @@ BASE_MODEL_DIR = pwd() + "/app/services/model/"
 
 
 def check_project_root():
-    directory = cd() + "/app/config/"
+    directory = pwd() + "/app/config/"
     if not os.path.exists(directory):
+        print directory
         print >> sys.stderr, "not a nette project"
         sys.exit(1)
 
@@ -99,8 +100,8 @@ if __name__ == "__main__":
         print >> sys.stderr, "directory '%s' already exists" % directory
         sys.exit(1)
 
-    write(cd() + "/templates/Entity.php", output_filename_prefix + ".php", name)
-    write(cd() + "/templates/Repository.php", output_filename_prefix + "Repository.php", name)
+    write(cd() + "/templates/Entity.php", directory + "/" + classname + ".php", name)
+    write(cd() + "/templates/Repository.php", directory + "/" + classname + "Repository.php", name)
     with open("./app/config/config.model.neon", "a") as myfile:
         myfile.write("\n    - " + DEFAULT_NAMESPACE + "\\" + nprefix + classname + "Repository")
 
